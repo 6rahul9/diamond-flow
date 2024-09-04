@@ -21,8 +21,24 @@ export class ColorMaskPass{
                 u_textureMix: { value: 1 }
             },
 
-            vertexShader: shader:colorMaskVert,
-            fragmentShader : sha
+            vertexShader: shaders.colorMaskVert,
+            fragmentShader : shaders.colorMaskFrag
         }
+
+        this.pass = new ShaderPass(shader)
+
+        const d={
+            mixTexture: () => {
+                this.pass.uniforms.u_textureMix.value = this.pass.uniforms.u_textureMix.value === 0 ?  1 : 0 
+            }
+        }
+
+        this.gui.add(d, 'mixTexture').name('Mix Texture')
+    }
+
+    private calcCoveredTextureScale = (texture: THREE.Texture, aspect: number, target? : THREE.Vector2) => {
+        const result = target?? new THREE.Vector2()
+        const imageAspect = texture.image.width / texture.image.height
+        if(aspect < imageAspect) 
     }
 }
