@@ -16,8 +16,13 @@ export class ColorMaskPass{
         const shader : THREE.Shader = {
             uniforms : {
                 tDiffuse : { value : null },
-                
-            }
+                u_texture: { value: this.texture },
+                u_uvScale: { value: this.calcCoveredTextureScale(this.texture, this.canvasAspect) },
+                u_textureMix: { value: 1 }
+            },
+
+            vertexShader: shader:colorMaskVert,
+            fragmentShader : sha
         }
     }
 }
