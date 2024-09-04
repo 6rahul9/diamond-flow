@@ -1,7 +1,7 @@
 import GUI from 'lil-gui'
 import * as THREE from 'three'
-import { ShaderPass  } from 'three/examples/jsm/postprocessing/ShaderPass'
-import { shader } from './shaderChunk'
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass'
+import { shaders } from './shaderChunk';
 import { uniform } from 'three/webgpu'
 
 
@@ -39,6 +39,14 @@ export class ColorMaskPass{
     private calcCoveredTextureScale = (texture: THREE.Texture, aspect: number, target? : THREE.Vector2) => {
         const result = target?? new THREE.Vector2()
         const imageAspect = texture.image.width / texture.image.height
-        if(aspect < imageAspect) 
+        if(aspect < imageAspect) result.set(aspect / imageAspect, 1)
+            else result.set(1, imageAspect / aspect) 
+        return result;
     }
+    updateTextureScale = (canvasAspect: number) {
+        const { u_texture, u_uvScale } = this.pass.uniforms
+        this.calcCoveredTextureScale(u_texture.value, canvasAspect, u_uvScale.value)
+    }
+    
+    update = () => {}
 }
