@@ -1,4 +1,4 @@
-<!doctype html>
+<!-- <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -10,4 +10,22 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
-</html>
+</html> -->
+
+
+<!-- prettier-ignore -->
+{{#> layout
+	title='Diamond Flow'
+	scriptPath='/home/index.ts'
+	stylePath='/home/index.scss'
+}}
+
+<div class="home">
+	{{> three-canvas}}
+	<div class="home-caption">[Space]：start / stop animation</div>
+	<a class="home-link" href="https://github.com/nemutas/rhombus-flow" target="_blank" rel="noopener noreferrer"
+		>GitHub</a
+	>
+</div>
+
+{{/layout}}
