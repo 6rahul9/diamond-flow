@@ -125,5 +125,18 @@ export class TCanvas extends TCanvasBase {
         const geometry = new THREE.OctahedronGeometry()
         geometry.applyMatrix4(new THREE.Matrix4().makeScale(1 * scale, 1 * scale, 6 * scale))
         geometry.setAttribute('simulataorUv', this.simulator.uv)
+
+        const material= new THREE.MeshStandardMaterial({
+            color : '#5c5c5c',
+            metelness : 0.9,
+            roughness: 0.2,
+            envMap: this.assets.envMap.data as THREE.Texture,
+            envMapIntensity : 0.02
+        })
+
+        this.customMaterial(material)
+        cosnt depthMaterial = new THREE.MeshDepthMaterial({ depthPacking: THREE.RGBADepthPacking})
+        this.customMaterial(depthMaterial, true)
+        
     }
 }
