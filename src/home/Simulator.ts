@@ -20,5 +20,11 @@ export class TCanvas extends TCanvasBase {
         u_prevPositionTexture : { value : null }
     }
 
+    peivate fxaa?: FxaaPass
+    private colorMask ?: ColorMaskPass
     
+    private datas = {
+        visibleState: false,
+        
+    }
 }
