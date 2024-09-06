@@ -170,6 +170,7 @@ export class TCanvas extends TCanvasBase {
         this.effectComposer.addPass(GammaCorrectionShader)
         this.fxaa = new FxaaPass(this.size.width, this.size.height)
         this.effectComposer.addPass(this.fxaa.pass)
-        
+
+        this.colorMask  = new ColorMaskPass(this.assets.image.data as THREE.Texture,)
     }
 }
