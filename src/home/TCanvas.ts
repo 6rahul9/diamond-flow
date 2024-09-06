@@ -120,6 +120,10 @@ export class TCanvas extends TCanvasBase {
     }
 
     private createMesh = () => {
-        
+        const amount = this.WIDTH * this.HEIGHT
+        const scale = 0.07
+        const geometry = new THREE.OctahedronGeometry()
+        geometry.applyMatrix4(new THREE.Matrix4().makeScale(1 * scale, 1 * scale, 6 * scale))
+        geometry.setAttribute('simulataorUv', this.simulator.uv)
     }
 }
