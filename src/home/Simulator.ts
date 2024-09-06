@@ -60,6 +60,19 @@ export class TCanvas extends TCanvasBase {
         this.camera.position.set(0, 3, 15)
         const controls = this.setOrbitControls(0.1)
         controls.minAzimuthAngle = 0
+        controls.maxAzimuthAngle = 0
+        controls.maxPolarAngle = Math.PI / 2
+        controls.enablePen = false
+        controls.minDistance = 3
+        controls.maxDistance = 16
+        this.mouse3d = new Mouse3d(this.camera)
+        
+        this.setStats()
+        this.VisibleStats('hidden')
+        this.gui.open(false)
+        this.gui.add(this.datas, 'stats').name('Stats')
     }
+
+    
     
 }
