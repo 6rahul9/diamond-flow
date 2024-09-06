@@ -119,5 +119,7 @@ export class TCanvas extends TCanvasBase {
         }
     }
 
-    
+    private createMesh = () => {
+        
+    }
 }
