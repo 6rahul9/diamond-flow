@@ -151,6 +151,25 @@ export class TCanvas extends TCanvasBase {
 
         const shadowGeometry = new THREE.PlaneGeometry(60, 0)
         const shadowMaterial = new THREE.ShadowMaterial({ color: '#000', opacity: 0.2 })
-        const shadowMesh = new 
+        const shadowMesh = new THREE.Mesh(shadowGeometry, shadowMaterial)
+        shadowMesh.receiveShadow = true
+        shadowMesh.rotation.x = -Math.PI / 2
+        shadowMesh.position.y = -6.5 
+        this.scene.add(shadowMesh)
+
+        const d ={
+            reciveShadow: ()  => {
+                mesh.receiveShadow = !mesh.receiveShadow
+            }
+        }
+        this.gui.add(d, 'reciveShadow').name('Recive Shadow')
+    }
+
+    private createPostProcessing = () => {
+        const gammaCorrectionPass = new ShaderPass(GammaCorrectionShader)
+        this.effectComposer.addPass(GammaCorrectionShader)
+        this.fxaa = new FxaaPass(this.size.width, this.size.height)
+        this.effectComposer.addPass(this.fxaa.pass)
+        
     }
 }
