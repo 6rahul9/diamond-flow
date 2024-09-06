@@ -33,4 +33,27 @@ export class TCanvas extends TCanvasBase {
         enableAnimation : true,
         toggleAnimation : () => (this.datas.enableAnimation = !this.datas.enableAnimation)
     }
+
+    private assets: Assets = {
+        envMap : {
+            path: publicPath('/resources/studio_small_08_1k.hdr') },
+		image: { path: publicPath('/resources/wlop5.jpg')
+        }
+
+        constructor(parentNode : parentNode ){
+            super(parentNode)
+
+            this.loadAssets(this.assets).then(() => {
+                this.setScene()
+                this.createSimulator()
+                this.creatrLight()
+                this.createMesh()
+                this.createPostProcessing()
+                this.setResizeCallback()
+                this.addEvent()
+                this.setDispose()
+                this.animate(this.update)
+            })
+        }
+    }
 }
