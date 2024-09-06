@@ -73,6 +73,26 @@ export class TCanvas extends TCanvasBase {
         this.gui.add(this.datas, 'stats').name('Stats')
     }
 
-    
-    
+    private createSimulator = () => {
+        this.simulator = new this.simulator(this.renderer, this.WIDTH, this.HEIGHT)
+    }
+
+    private createLight = () => {
+        const directionalLight = new THREE.DirectionalLight()
+        directionalLight.intensity = 1 
+        directionalLight.position.set(0, 10, 0)
+        directionalLight.castShadow = true
+        directionalLight.shadow.camera.far = 30
+        const edgeX = 30
+        const edgeY = 30
+        directionalLight.shadow.camera.top = edgeY / 2
+        directionalLight.shadow.camera.bottom = -edgeY / 2
+        directionalLight.shadow.camera.left = -edgeY / 2
+        directionalLight.shadow.camera.right= edgeY / 2
+        directionalLight.name = 'directionalLight'
+        this.scene.add(directionalLight)
+
+        // const helper = new THREE.CameraHelper(directionalLight.shadow.camera)
+		// this.scene.add(helper)
+    }
 }
