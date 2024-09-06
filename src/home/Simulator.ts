@@ -24,7 +24,13 @@ export class TCanvas extends TCanvasBase {
     private colorMask ?: ColorMaskPass
     
     private datas = {
-        visibleState: false,
-        
+        visibleStats: false,
+        stats : () => {
+            this.datas.visibleStats = !this.datas.visibleStats
+            this.visibleStats(this.datas.visibleStats ? 'visible' : 'hidden')
+        },
+
+        enableAnimation : true,
+        toggleAnimation : () => (this.datas.enableAnimation = !this.datas.enableAnimation)
     }
 }
