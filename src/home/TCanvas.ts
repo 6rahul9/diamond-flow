@@ -135,8 +135,22 @@ export class TCanvas extends TCanvasBase {
         })
 
         this.customMaterial(material)
-        cosnt depthMaterial = new THREE.MeshDepthMaterial({ depthPacking: THREE.RGBADepthPacking})
+        const depthMaterial = new THREE.MeshDepthMaterial({ depthPacking: THREE.RGBADepthPacking})
         this.customMaterial(depthMaterial, true)
-        
+
+        const mesh = new THREE.InstancedMesh(geometry, material, amount)
+
+        mesh.customDepthMaterial = depthMaterial
+        mesh.castShadow = true
+        mesh.receiveShadow = true
+
+        const dummy = new THREE.Object3D()
+        ;[...Array(amount)].forEach((_, i) => mesh.setMatrixAt(i, dummy.matrix))
+
+        this.scene.add(mesh)
+
+        const shadowGeometry = new THREE.PlaneGeometry(60, 0)
+        const shadowMaterial = new THREE.ShadowMaterial({ color: '#000', opacity: 0.2 })
+        const shadowMesh = new 
     }
 }
