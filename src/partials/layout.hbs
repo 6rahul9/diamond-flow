@@ -9,8 +9,13 @@
     {{#if scriptPath}}
     <script type="module" src={{scriptPath}} defer></script>
     {{#if}}
+    <link type="stylesheet" href="/src/styles/base.scss" />
+    {{#if stylesPath}}
+    <link rel="stylesheet" href={{stylesPath}} />
+     {{/if}}
 </head>
 <body>
     
 </body>
+{{> @partial-block}}
 </html>
