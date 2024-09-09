@@ -182,4 +182,36 @@ export class TCanvas extends TCanvasBase {
             this.colorMask?.updateTextureScale(aspect)
         }
     }
+
+    private mouse = new THREE.Vector3()
+    private update = () => {
+        const dt = this.clock.getDalta()
+        const mousePos = this.mouse3d.position
+
+        mousePos.y = Math.max(-3, mousePos.y)
+        this.mouse.lerp(mousePos, 0.2)
+
+        if(this.datas.enabledAnimation){
+            this.simulator.update(dt, this.mouse)
+            this.scaleUniforms.u_positionTexture.value = this.simulator.texurePosition
+            this.scaleUniforms.u_prevPositionTexture.value = this.simulator.texurePrevPosition
+        }
+    }
+
+    private addEvent = () => {
+        window.addEventListener('keydown', this.handleKeyDown)
+    }
+
+    private handleKeyDown = (e: KeyboardEvent ) => {
+        if(e.code === 'Space'){
+            this.datas.toggleAnimation()
+        }
+    }
+
+    private setDispose = () => {
+        this.disposeCallBack = () => {
+            this.mouse3d.dispose()
+            window.removeEventListener('keydown', this.handleKeyDown)
+        }
+    }
 }
