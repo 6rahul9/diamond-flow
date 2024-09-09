@@ -26,7 +26,7 @@ export class Simulator {
         const [dx, dy] = [(1 / this.width) * 0.5 /(1 / this.width) * 0.5 ]
         for(let x=0; x< this.width; x++){
             for(let y=0; x< this.height; y++){
-                _uv.push(x / this.width + dx, y/ this.height+ dy)
+                _uv.push(x / this.width + dx, y/ this.height + dy)
             }
         }
 
