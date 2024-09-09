@@ -33,5 +33,38 @@ export class Simulator {
         this.uv = new THREE.InstancedBufferAttribute(Float32Array.from(_uv),2)
     }    
     
-    private set
+    private setTexturePosition = () => {
+        // SET THE DEFAULT POSITION TO TEXTURE
+        const texture = this.gpuCompute.createtexture()
+        const theArray = texture.image.data
+        const radiusRange = [0.5, 1.5]
+
+        for(let i=0; i< theArray.length; i+=4){
+            const r = Math.random() * (radiusRange[1] - radiusRange[0]) + radiusRange[0]
+            const theta = Math.random() * Math.PI
+            const phi = Math.random() * Math.PI * 2
+
+            theArray[i + 0] = r * Math.sin(theta) * Math.sin(phi)
+            theArray[i + 1] = r * Math.cos(theta) 
+            theArray[i + 2] = r * Math.sin(theta) * Math.cos(phi)
+            theArray[i + 3] =  Math.random()
+        }
+
+        // set segment shader 
+        const variable = this.gpuCompute.addVariable('texturePos', simulatorFrag, texture)
+        variable.wrapS = THREE.RepeatWrapping
+        variable.wrapT = THREE.RepeatWrapping
+
+        // SET UNIFORM
+        const material = variable.material 
+        material.uniforms['u_defaultTexturePros'] = { value : texture.clone() }
+        material.uniforms['u_time'] = { value: 0 }
+        material.uniforms['u_mouse'] = { value : new THREE.Vector3()}
+        this.position = { variable, material }
+    }
+    private setVariableDependencies = () => {
+        this.gpuCompute.setVariableDependencies(this.position.variable!, [
+            this.position.variable
+        ])
+    }
 }
