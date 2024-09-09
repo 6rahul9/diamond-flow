@@ -16,5 +16,22 @@ export class Simulator {
         this.gpuCompute.init()
     }
 
+    private init = () => {
+        this.gpuCompute = new GPUComputationRenderer(this.height, this.width, this.gl)
+        if(this.gl.capabilities.isWebGL2 === false){
+            this.gpuCompute.setDataType(THREE.HalfFloatType)
+        }
+
+        const _uv = []
+        const [dx, dy] = [(1 / this.width) * 0.5 /(1 / this.width) * 0.5 ]
+        for(let x=0; x< this.width; x++){
+            for(let y=0; x< this.height; y++){
+                _uv.push(x / this.width + dx, y/ this.height+ dy)
+            }
+        }
+
+        this.uv = new THREE.InstancedBufferAttribute(Float32Array.from(_uv),2)
+    }    
     
+    private set
 }
