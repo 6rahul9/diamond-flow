@@ -64,7 +64,23 @@ export class Simulator {
     }
     private setVariableDependencies = () => {
         this.gpuCompute.setVariableDependencies(this.position.variable!, [
-            this.position.variable
+            this.position.variable! /**, this.velocity.variable */
         ])
+    }
+
+    update = (dt: number, mousePoos : THREE.Vector3)=> {
+        this.position.material!.uniforms.u_time.value +=dt
+        this.position.material!.uniforms.u_mouse.value.copy(mousePos)
+        this.gpuCompute.compute()
+    }
+
+    get texturePosition(){
+        const target = this.gpuCompute.getCurrentRenderTarget(this.position.variable!) as THREE.WebGLRenderTarget
+        return target.texture
+    }
+
+    get texturePrevPosition(){
+        const target = this.gpuCompute.getCurrentRenderTarget(this.position.variable!)as THREE.WebGLRenderTarget
+        return target.texture
     }
 }
