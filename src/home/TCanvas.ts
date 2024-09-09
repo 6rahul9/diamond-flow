@@ -171,6 +171,15 @@ export class TCanvas extends TCanvasBase {
         this.fxaa = new FxaaPass(this.size.width, this.size.height)
         this.effectComposer.addPass(this.fxaa.pass)
 
-        this.colorMask  = new ColorMaskPass(this.assets.image.data as THREE.Texture,)
+        this.colorMask  = new ColorMaskPass(this.assets.image.data as THREE.Texture, this.size.aspect, this.gui)
+        this.effectComposer.addPass(this.colorMask.pass)
+    }
+
+    private setResizeCallback = () => {
+        this.setResizeCallback = () => {
+            const {width, height, aspect} = this.size
+            this.fxaa?.update{width, height}
+            this.colorMask?.updateTextureScale(aspect)
+        }
     }
 }
