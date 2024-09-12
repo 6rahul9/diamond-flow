@@ -18,4 +18,9 @@ export class Mouse3d{
         this.ray.origin.add(this.ray.direction.multiplyScalar(distance * 1.0))
         return this.ray.origin;
     }
+
+    private handleMouseMove = (e: MouseEvent) => {
+        this.mouse.x = ((e.pageX - window.scrollX) / window.innerWidth) * 2 - 1
+        this.mouse.y = -((e.pageY - window.scrollY) / window.innerWidth) * 2 + 1
+    }
 }
