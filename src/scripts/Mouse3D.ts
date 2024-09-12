@@ -7,7 +7,7 @@ export class Mouse3d{
 
     constructor(private camera: THREE.Camera){
         window.addEventListener('mousemove', this.handleMouseMove)
-        window.addEventListener('touchmove', this.handleMouseMove)
+        window.addEventListener('touchmove', this.handleTouchMove)
     }
 
     get position(){
@@ -23,11 +23,14 @@ export class Mouse3d{
         this.mouse.x = ((e.pageX - window.scrollX) / window.innerWidth) * 2 - 1
         this.mouse.y = -((e.pageY - window.scrollY) / window.innerWidth) * 2 + 1
     }
-    private handleMouseMove = (e: MouseEvent) => {
+    private handleTouchMove = (e: MouseEvent) => {
         const { pageX, pageY } = e.touches[0]
         this.mouse.x = ((e.pageX - window.scrollX) / window.innerWidth) * 2 - 1
         this.mouse.y = -((e.pageY - window.scrollY) / window.innerWidth) * 2 + 1
     }
 
-    
+    dispose = () => {
+        document.removeEventListener('mousemove', this.handleMouseMove)
+        document.removeEventListener('touchmove', this.handleTouchMove)
+    }    
 }
