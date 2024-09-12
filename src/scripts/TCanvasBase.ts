@@ -20,6 +20,13 @@ export type Assets = {
 export abstract class TCanvasBase{
     protected container : HTMLDivElement
     protected renderer! : THREE.WebGLRenderer
-    
+    protected scene! : THREE.Scene
+    protected camera! : THREE.Camera
+    protected clock! : THREE.Clock 
+    protected resizeCallBack? :() => void
+    protected disposeCallBack? :() => void
 
+    private _orbitControls? : OrbitControls
+    private _gui? : GUI
+    
 }
