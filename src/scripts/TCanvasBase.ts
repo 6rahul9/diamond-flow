@@ -7,3 +7,19 @@ import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 
+
+export type Assets = {
+    [key in string] : {
+        data? : THREE.Texture |  THREE.VideoTexture | GLTF
+        path: string
+        encoding? : boolean
+        flipy ? : boolean
+    }
+}
+
+export abstract class TCanvasBase{
+    protected container : HTMLDivElement
+    protected renderer! : THREE.WebGLRenderer
+    
+
+}
