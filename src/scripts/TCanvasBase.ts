@@ -62,6 +62,19 @@ export abstract class TCanvasBase{
         // ↓ with unreal bloom effect
 		// renderer.toneMapping = THREE.ACESFilmicToneMapping
 		// append canvas element
-        
+
+        this.container.appendChild(this.renderer.domElement)
+
+        // scene
+        this.scene  = new THREE.Scene()
+
+        //camera
+        this.camera = new THREE.PerspectiveCamera(50, aspect, 0.01, 1000)
+        this.camera.position.set(0, 0, 5)
+
+        this.clock = new THREE.Clock()
+
+        	// ------------------------------------------------------
+	// utils
     }
 }
