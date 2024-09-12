@@ -28,5 +28,15 @@ export abstract class TCanvasBase{
 
     private _orbitControls? : OrbitControls
     private _gui? : GUI
-    
+    private enableOrbitControlsDamping = false
+    private animeId? :  number 
+    private composer?: EffectComposer
+    private stats?: Stats
+
+    constructor(parentNode: ParentNode, containerClassName = 'three-container'){
+        let container: HTMLDivElement | null
+        try{
+            cnstainer = parentNode 
+        }
+    }
 }
