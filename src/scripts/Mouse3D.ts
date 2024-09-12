@@ -23,4 +23,11 @@ export class Mouse3d{
         this.mouse.x = ((e.pageX - window.scrollX) / window.innerWidth) * 2 - 1
         this.mouse.y = -((e.pageY - window.scrollY) / window.innerWidth) * 2 + 1
     }
+    private handleMouseMove = (e: MouseEvent) => {
+        const { pageX, pageY } = e.touches[0]
+        this.mouse.x = ((e.pageX - window.scrollX) / window.innerWidth) * 2 - 1
+        this.mouse.y = -((e.pageY - window.scrollY) / window.innerWidth) * 2 + 1
+    }
+
+    
 }
