@@ -73,8 +73,12 @@ export abstract class TCanvasBase{
         this.camera.position.set(0, 0, 5)
 
         this.clock = new THREE.Clock()
+    }
 
-        	// ------------------------------------------------------
+    	// ------------------------------------------------------
 	// utils
+
+    protected get gui(){
+        if(!this.gui)
     }
 }
