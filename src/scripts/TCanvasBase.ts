@@ -79,6 +79,7 @@ export abstract class TCanvasBase{
 	// utils
 
     protected get gui(){
-        if(!this.gui)
+        if(!this._gui) this._gui = new GUI()
+            return this._gui
     }
 }
