@@ -97,5 +97,17 @@ export abstract class TCanvasBase{
         return this.composer
     }
 
-    
+    protected setOrbitControls = (damping :number | false = 0.1) => {
+        if(!this._orbitControls) this._orbitControls = new OrbitControls(this.camera, this.renderer.domElement)
+
+            if(typeof damping === 'number'){
+                this._orbitControls.enableDamping = true
+                this._orbitControls.dampingFactor = damping
+            }else{
+                this._orbitControls.enableDamping = false
+                this._orbitControls.dampingFactor = 0
+            }
+            this._orbitControls.enableDamping = this._orbitControls.dampingFactor 
+            return this._orbitControls
+    }
 }
