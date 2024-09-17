@@ -201,5 +201,32 @@ export abstract class TCanvasBase{
         }
     }
 
-    protected visibleStats = (mode: visible )
+    protected visibleStats = (mode: 'visible' | 'hiddn') => {
+        if(this.stats){
+            this.stats.dom.style.visibility = mode 
+        }
+    }
+
+    // ------------------------------------------------------
+	// event
+
+    private addEvent = () => {
+        window.addEventListener('resize', this.handleResize)
+    }
+
+    private handleResize = () => {
+        const {width, height, aspect} = this.size
+        if(this.camera instanceof THREE.PerspectiveCamera){
+            this.camera.aspect = aspect 
+            this,camera.updateProjectionMatrix()
+        }else if(this.camera instanceof THREE.ExOrthographicCamera){
+            this.camera.update(aspect)
+        }
+
+        this.renderer.setSize(width, height)
+        this.composer?.setSize(width, height)
+        this.render()
+    }
+
+    
 }
