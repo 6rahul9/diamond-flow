@@ -185,5 +185,21 @@ export abstract class TCanvasBase{
         )
     }
 
-    
+    // ------------------------------------------------------
+	// helper
+
+    protected setAxesHelper = (size?: number ) => {
+        const axesHelper = new THREE.AxesHelper(size)
+        this.scene.add(axesHelper)
+        return axesHelper
+    }
+
+    protected setStats =() => {
+        if(!this.stats) {
+            this.stats = Stats()
+            this.container.appendChild(this.stats.dom)
+        }
+    }
+
+    protected visibleStats = (mode: visible )
 }
