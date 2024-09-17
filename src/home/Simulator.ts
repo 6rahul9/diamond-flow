@@ -17,13 +17,13 @@ export class Simulator {
     }
 
     private init = () => {
-        this.gpuCompute = new GPUComputationRenderer(this.height, this.width, this.gl)
+        this.gpuCompute = new GPUComputationRenderer(this.width, this.height, this.gl)
         if(this.gl.capabilities.isWebGL2 === false){
             this.gpuCompute.setDataType(THREE.HalfFloatType)
         }
 
         const _uv = []
-        const [dx, dy] = [(1 / this.width) * 0.5 /(1 / this.width) * 0.5 ]
+        const [dx, dy] = [(1 / this.width) * 0.5, (1 / this.width) * 0.5 ]
         for(let x=0; x< this.width; x++){
             for(let y=0; x< this.height; y++){
                 _uv.push(x / this.width + dx, y/ this.height + dy)
@@ -35,7 +35,7 @@ export class Simulator {
     
     private setTexturePosition = () => {
         // SET THE DEFAULT POSITION TO TEXTURE
-        const texture = this.gpuCompute.createtexture()
+        const texture = this.gpuCompute.createTexture()
         const theArray = texture.image.data
         const radiusRange = [0.5, 1.5]
 
@@ -68,7 +68,7 @@ export class Simulator {
         ])
     }
 
-    update = (dt: number, mousePoos : THREE.Vector3)=> {
+    update = (dt: number, mousePos : THREE.Vector3)=> {
         this.position.material!.uniforms.u_time.value +=dt
         this.position.material!.uniforms.u_mouse.value.copy(mousePos)
         this.gpuCompute.compute()
