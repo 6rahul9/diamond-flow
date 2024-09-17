@@ -16,6 +16,7 @@
     "three": "^0.168.0"
   },
   "devDependencies": {
+    "@types/node": "^22.5.5",
     "@types/three": "^0.143.0",
     "gh-pages": "^4.0.0",
     "ress": "^5.0.2",
