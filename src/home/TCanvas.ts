@@ -3,7 +3,7 @@ import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass';
 import { GammaCorrectionShader } from 'three/examples/jsm/shaders/GammaCorrectionShader';
 import { Mouse3d } from '../scripts/Mouse3d';
 import { Assets, TCanvasBase } from '../scripts/TCanvasBase';
-import { publicPath } from '../scripts/utils';
+import { publicPath } from '../scripts/utlis.ts';
 import { ColorMaskPass } from './ColorMaskPass';
 import { FxaaPass } from './fxaaPass';
 import { shaders } from './shaderChunk';
@@ -20,12 +20,12 @@ export class TCanvas extends TCanvasBase {
         u_prevPositionTexture : { value : null }
     }
 
-    peivate fxaa?: FxaaPass
+    private fxaa?: FxaaPass
     private colorMask ?: ColorMaskPass
     
     private datas = {
         visibleStats: false,
-        stats : () => {
+        stats: () => {
             this.datas.visibleStats = !this.datas.visibleStats
             this.visibleStats(this.datas.visibleStats ? 'visible' : 'hidden')
         },
@@ -35,17 +35,16 @@ export class TCanvas extends TCanvasBase {
     }
 
     private assets: Assets = {
-        envMap : {
-            path: publicPath('/resources/studio_small_08_1k.hdr') },
+        envMap : { path: publicPath('/resources/studio_small_08_1k.hdr') },
 		image: { path: publicPath('/resources/wlop5.jpg') }
-        }
+    }
 
-    constructor(parentNode : parentNode ){
+    constructor(parentNode : ParentNode ){
         super(parentNode)
             this.loadAssets(this.assets).then(() => {
             this.setScene()
             this.createSimulator()
-            this.creatrLight()
+            this.createLight()
             this.createMesh()
             this.createPostProcessing()
             this.setResizeCallback()
@@ -62,19 +61,19 @@ export class TCanvas extends TCanvasBase {
         controls.minAzimuthAngle = 0
         controls.maxAzimuthAngle = 0
         controls.maxPolarAngle = Math.PI / 2
-        controls.enablePen = false
+        controls.enablePan = false
         controls.minDistance = 3
         controls.maxDistance = 16
         this.mouse3d = new Mouse3d(this.camera)
         
         this.setStats()
-        this.VisibleStats('hidden')
+        this.visibleStats('hidden')
         this.gui.open(false)
         this.gui.add(this.datas, 'stats').name('Stats')
     }
 
     private createSimulator = () => {
-        this.simulator = new this.simulator(this.renderer, this.WIDTH, this.HEIGHT)
+        this.simulator = new Simulator(this.renderer, this.WIDTH, this.HEIGHT)
     }
 
     private createLight = () => {
@@ -83,12 +82,13 @@ export class TCanvas extends TCanvasBase {
         directionalLight.position.set(0, 10, 0)
         directionalLight.castShadow = true
         directionalLight.shadow.camera.far = 30
-        const edgeX = 30
+        const edgeX = 60
         const edgeY = 30
         directionalLight.shadow.camera.top = edgeY / 2
         directionalLight.shadow.camera.bottom = -edgeY / 2
-        directionalLight.shadow.camera.left = -edgeY / 2
-        directionalLight.shadow.camera.right= edgeY / 2
+        directionalLight.shadow.camera.left = -edgeX / 2
+        directionalLight.shadow.camera.right= edgeX / 2
+        directionalLight.shadow.mapSize.set(4096, 2048) 
         directionalLight.name = 'directionalLight'
         this.scene.add(directionalLight)
 
@@ -100,7 +100,7 @@ export class TCanvas extends TCanvasBase {
         material.onBeforeCompile = shader => {
             //UNIFORMS
             shader.uniforms.u_positionTexture = this.scaleUniforms.u_positionTexture
-            shader.uniforms.u_prevPositionTexture = this.scaleUniforms.u_prevPositionTexture
+			shader.uniforms.u_prevPositionTexture = this.scaleUniforms.u_prevPositionTexture
             //VERTEX
 
             shaders.vertexShader = shader.vertexShader.replace('#include <common>', shaders.vertDefine)
@@ -128,7 +128,7 @@ export class TCanvas extends TCanvasBase {
 
         const material= new THREE.MeshStandardMaterial({
             color : '#5c5c5c',
-            metelness : 0.9,
+            metalness : 0.9,
             roughness: 0.2,
             envMap: this.assets.envMap.data as THREE.Texture,
             envMapIntensity : 0.02
@@ -167,7 +167,7 @@ export class TCanvas extends TCanvasBase {
 
     private createPostProcessing = () => {
         const gammaCorrectionPass = new ShaderPass(GammaCorrectionShader)
-        this.effectComposer.addPass(GammaCorrectionShader)
+        this.effectComposer.addPass(gammaCorrectionPass)
         this.fxaa = new FxaaPass(this.size.width, this.size.height)
         this.effectComposer.addPass(this.fxaa.pass)
 
@@ -176,9 +176,9 @@ export class TCanvas extends TCanvasBase {
     }
 
     private setResizeCallback = () => {
-        this.setResizeCallback = () => {
+        this.resizeCallback = () => {
             const {width, height, aspect} = this.size
-            this.fxaa?.update{width, height}
+            this.fxaa?.update(width, height)
             this.colorMask?.updateTextureScale(aspect)
         }
     }

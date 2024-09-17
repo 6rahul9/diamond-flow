@@ -51,7 +51,7 @@ export abstract class TCanvasBase{
 	// initialize
 
     private init = () => {
-        const{width, height, aspect} = this.size
+        const{ width, height, aspect } = this.size
         //renderer
         this.renderer = THREE.WebGLRenderer({ antialias: true, alpha: true })
         this.renderer.setPixelRatio(window.devicePixelRatio)
@@ -210,12 +210,13 @@ export abstract class TCanvasBase{
     // ------------------------------------------------------
 	// event
 
-    private addEvent = () => {
+    private addEvents = () => {
         window.addEventListener('resize', this.handleResize)
     }
 
     private handleResize = () => {
-        const {width, height, aspect} = this.size
+        const { width, height, aspect } = this.size
+        this.resizeCallback && this.resizeCallback()
         if(this.camera instanceof THREE.PerspectiveCamera){
             this.camera.aspect = aspect 
             this,camera.updateProjectionMatrix()
@@ -230,7 +231,7 @@ export abstract class TCanvasBase{
 
     // ------------------------------------------------------
 	// lifecycle
-    protected animated =(callback?: () => void) => {
+    protected animate =(callback?: () => void) => {
         this.animeId = requestAnimationFrame(this.animate.bind(this, callback))
         this.enableOrbitControlsDamping && this._orbitControls?.update()
         this.stats && this.stats.update()
