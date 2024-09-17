@@ -228,5 +228,45 @@ export abstract class TCanvasBase{
         this.render()
     }
 
-    
+    // ------------------------------------------------------
+	// lifecycle
+    protected animated =(callback?: () => void) => {
+        this.animeId = requestAnimationFrame(this.animate.bind(this, callback))
+        this.enableOrbitControlsDamping && this._orbitControls?.update()
+        this.stats && this.stats.update()
+
+        callback && callback()
+        this.render()
+    }
+
+    protected render = () => {
+        if(!this.composer){
+            this.renderer.render(this.scene, this.camera)
+        }else{
+            this.composer.render
+        }
+    }
+
+    dispose = () =>{
+        this.disposeCallBack && this.disposeCallBack()
+        this.stats && this.container.removeChild(this.stats.dom)
+        this._gui && this._gui.destroy()
+
+        this.animeId && cancelAnimationFrame(this.animeId)
+        window.removeEventListener('resize',this.handleResize)
+    }
+}
+
+export class ExOrthographicCamera extends THREE.OrthographicCamera{
+    constructor(private halfHeight: number, near : number, far: number, aspect: number){
+    const halfWidth = this.halfHeight * aspect 
+    super (-halfWidth, halfWidth, halfHeight, -halfHeight, near, far)
+    }
+
+    update = (aspect :number ) =>{
+        const halfWidth = this.halfHeight * aspect 
+        this.left = -halfWidth
+        this.right = halfWidth
+        this.updateProjectionMatrix()
+    }
 }
