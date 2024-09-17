@@ -82,4 +82,20 @@ export abstract class TCanvasBase{
         if(!this._gui) this._gui = new GUI()
             return this._gui
     }
+
+    protected get size(){
+        const { innerHeight : height, innerWidth : width  } = window 
+        const aspect = width / height 
+        return(width, height, aspect)
+    }
+
+    protected get effectComposer (){
+        if(!this.composer){
+            this.composer = new EffectComposer(this.renderer)
+            this.composer.addPass(new RenderPass(this.camera, this.scene))
+        }
+        return this.composer
+    }
+
+    
 }
