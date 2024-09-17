@@ -5,7 +5,7 @@ import { Mouse3d } from '../scripts/Mouse3d';
 import { Assets, TCanvasBase } from '../scripts/TCanvasBase';
 import { publicPath } from '../scripts/utlis.ts';
 import { ColorMaskPass } from './ColorMaskPass';
-import { FxaaPass } from './fxaaPass';
+import { FxaaPass } from './FxaaPass.ts';
 import { shaders } from './shaderChunk';
 import { Simulator } from './Simulator';
 
@@ -200,19 +200,25 @@ export class TCanvas extends TCanvasBase {
     }
 
     private addEvent = () => {
-        window.addEventListener('keydown', this.handleKeyDown)
+        window.addEventListener('keydown', this.handlekKeydown)
     }
 
-    private handleKeyDown = (e: KeyboardEvent ) => {
+    private handlekKeydown = (e: KeyboardEvent ) => {
         if(e.code === 'Space'){
             this.datas.toggleAnimation()
         }
     }
 
+    // private setDispose = () => {
+    //     this.disposeCallBack = () => {
+    //         this.mouse3d.dispose()
+    //         window.removeEventListener('keydown', this.handlekKeydown)
+    //     }
+    // }
     private setDispose = () => {
-        this.disposeCallBack = () => {
-            this.mouse3d.dispose()
-            window.removeEventListener('keydown', this.handleKeyDown)
-        }
-    }
+		this.disposeCallback = () => {
+			this.mouse3d.dispose()
+			window.removeEventListener('keydown', this.handlekKeydown)
+		}
+	}
 }
