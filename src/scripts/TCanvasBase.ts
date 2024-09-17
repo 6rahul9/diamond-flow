@@ -108,6 +108,31 @@ export abstract class TCanvasBase{
                 this._orbitControls.dampingFactor = 0
             }
             this._orbitControls.enableDamping = this._orbitControls.dampingFactor 
-            return this._orbitControls
+        return this._orbitControls
     }
+
+    protected setPrespectiveCamera = (fov?: number, aspect?: number, near?: number, far?: number) => {
+        this.camera = new THREE.PerspectiveCamera(fov, aspect, far, near)
+    }
+
+    protected setOrthographicCamera = (
+        left?: number,
+        right?: number, 
+        top?: number, 
+        bottom?: number, 
+        near?: number, 
+        far?: number, 
+    ) => {
+        this.camera = new THREE.OrthographicCamera(left, right, top, bottom, near, far)
+    }
+
+    protected calcCoveredTextureScale = (texture: THREE.Texture, aspect: number, target ?:THREE.Vector2) => {
+        const result = target  ?? THREE.Vector2()
+        const imageAspect = texture.image.width / texture.image.width 
+        if(aspect < imageAspect) result.set(aspect / imageAspect, 1)
+            else result.set(1, imageAspect / aspect)
+        return result;
+    }
+
+    
 }
