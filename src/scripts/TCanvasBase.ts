@@ -134,5 +134,5 @@ export abstract class TCanvasBase{
         return result;
     }
 
-    
+    protected coveredbackgroundtexture()
 }
