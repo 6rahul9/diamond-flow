@@ -134,5 +134,37 @@ export abstract class TCanvasBase{
         return result;
     }
 
-    protected coveredbackgroundtexture()
+    protected coveredbackgroundtexture = (texture : THREE.Texture) => {
+        texture.matrixAutoUpdate = false 
+        const scale = this.calcCoveredTextureScale(texture, this.size.aspect)
+        texture.matix.setUvTransform(0, 0, scale.x, scale.y, 0, 0.5, 0.5)
+        return texture
+    }
+
+    private getExtension = (path: string ) =>{
+        const s = path .split('.')
+        return s[s.length - 1]
+    }
+
+    protected loadAssets = async(assets : Assets) => {
+        const textureLoader = new THREE.TextureLoader()
+        const gltfLoader = new GLTFLoader()
+        const rgbeLoader = new RGBELoader()
+
+        await Promise.all(
+            Object.values(assets).map(async v => {
+                const extension = this.getextension(v.path)
+
+                if(['jpg', 'png', 'webp'].includes(extension)){
+                    const texture = await textureLoader.loadAsync(v.path)
+                    v.encoding && (texture.encoding = THREE.sRGBEncoding)
+                    v.flipY !== undefined && (texture.flipY = v.flipY)
+                    v.data = texture
+                }else if(['glb'].includes(extension)){
+                    const gltf = await gltfLoader.loadAsync(v.path)
+                    v.data = gltf
+                }
+            })
+        )
+    }
 }
