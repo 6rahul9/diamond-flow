@@ -9,7 +9,7 @@ class App {
     }
 
     private handleBeforeUnload = () => {
-        this.canvas.dispoase()
+        this.canvas.dispose()
     }
 }
 

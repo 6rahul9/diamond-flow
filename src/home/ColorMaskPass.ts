@@ -2,7 +2,7 @@ import GUI from 'lil-gui'
 import * as THREE from 'three'
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass'
 import { shaders } from './shaderChunk';
-import { uniform } from 'three/webgpu'
+// import { uniform } from 'three/webgpu'
 
 
 export class ColorMaskPass{
