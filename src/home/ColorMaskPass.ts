@@ -43,7 +43,7 @@ export class ColorMaskPass{
             else result.set(1, imageAspect / aspect) 
         return result;
     }
-    updateTextureScale = (canvasAspect: number) {
+    updateTextureScale = (canvasAspect: number) => {
         const { u_texture, u_uvScale } = this.pass.uniforms
         this.calcCoveredTextureScale(u_texture.value, canvasAspect, u_uvScale.value)
     }

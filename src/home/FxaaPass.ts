@@ -13,6 +13,6 @@ export class FxaaPass{
     }
 
     update = (width: number, height: number) => {
-        this.pass.uniforms.resolution.value.set(1/ innerWidth, 1 / height)
+        this.pass.uniforms.resolution.value.set(1/ width, 1 / height)
     }
 }

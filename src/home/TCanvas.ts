@@ -30,8 +30,8 @@ export class TCanvas extends TCanvasBase {
             this.visibleStats(this.datas.visibleStats ? 'visible' : 'hidden')
         },
 
-        enableAnimation : true,
-        toggleAnimation : () => (this.datas.enableAnimation = !this.datas.enableAnimation)
+        enabledAnimation : true,
+        toggleAnimation : () => (this.datas.enabledAnimation = !this.datas.enabledAnimation)
     }
 
     private assets: Assets = {
@@ -96,7 +96,7 @@ export class TCanvas extends TCanvasBase {
 		// this.scene.add(helper)
     }
 
-    private customMaterial = (material: THREE.Material, isDepthMaterial = false) =>{
+    private customMaterial = (material: THREE.Material, isDepthMaterial = false) => {
         material.onBeforeCompile = shader => {
             //UNIFORMS
             shader.uniforms.u_positionTexture = this.scaleUniforms.u_positionTexture
@@ -104,7 +104,8 @@ export class TCanvas extends TCanvasBase {
             //VERTEX
 
             shaders.vertexShader = shader.vertexShader.replace('#include <common>', shaders.vertDefine)
-            shaders.vertexShader = shader.vertexShader.replace('#include <uv_vertex>', shaders.vertCalcPosition)
+            shader.vertexShader = shader.vertexShader.replace('#include <uv_vertex>', shaders.vertCalcNormal)
+
 
             if(!isDepthMaterial){
                 shaders.vertexShader = shader.vertexShader.replace('#include <uv_vertex>', shaders.vertCalcNormal)
@@ -113,8 +114,8 @@ export class TCanvas extends TCanvasBase {
             shaders.vertexShader = shader.vertexShader.replace('#include <begin_vertex>', shaders.vertReplacePosition)
             //FRAGMENT
             if(!isDepthMaterial){
-                shader.fragementShader = shader.fragmentShader.replace('#define STANDARD', shaders.fragDefine)
-                shader.fragementShader = shader.fragmentShader.replace('#include <output_fragment>', shaders.fragParts)
+                shader.fragmentShader = shader.fragmentShader.replace('#define STANDARD', shaders.fragDefine)
+                shader.fragmentShader = shader.fragmentShader.replace('#include <output_fragment>', shaders.fragParts)
             }
         }
     }
@@ -124,7 +125,7 @@ export class TCanvas extends TCanvasBase {
         const scale = 0.07
         const geometry = new THREE.OctahedronGeometry()
         geometry.applyMatrix4(new THREE.Matrix4().makeScale(1 * scale, 1 * scale, 6 * scale))
-        geometry.setAttribute('simulataorUv', this.simulator.uv)
+        geometry.setAttribute('simulatorUv', this.simulator.uv)
 
         const material= new THREE.MeshStandardMaterial({
             color : '#5c5c5c',
@@ -149,7 +150,7 @@ export class TCanvas extends TCanvasBase {
 
         this.scene.add(mesh)
 
-        const shadowGeometry = new THREE.PlaneGeometry(60, 0)
+        const shadowGeometry = new THREE.PlaneGeometry(60, 30)
         const shadowMaterial = new THREE.ShadowMaterial({ color: '#000', opacity: 0.2 })
         const shadowMesh = new THREE.Mesh(shadowGeometry, shadowMaterial)
         shadowMesh.receiveShadow = true
@@ -185,7 +186,7 @@ export class TCanvas extends TCanvasBase {
 
     private mouse = new THREE.Vector3()
     private update = () => {
-        const dt = this.clock.getDalta()
+        const dt = this.clock.getDelta();
         const mousePos = this.mouse3d.position
 
         mousePos.y = Math.max(-3, mousePos.y)
@@ -193,8 +194,8 @@ export class TCanvas extends TCanvasBase {
 
         if(this.datas.enabledAnimation){
             this.simulator.update(dt, this.mouse)
-            this.scaleUniforms.u_positionTexture.value = this.simulator.texurePosition
-            this.scaleUniforms.u_prevPositionTexture.value = this.simulator.texurePrevPosition
+            this.scaleUniforms.u_positionTexture.value = this.simulator.texturePosition
+            this.scaleUniforms.u_prevPositionTexture.value = this.simulator.texturePrevPosition
         }
     }
 
