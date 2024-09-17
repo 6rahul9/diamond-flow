@@ -103,15 +103,15 @@ export class TCanvas extends TCanvasBase {
 			shader.uniforms.u_prevPositionTexture = this.scaleUniforms.u_prevPositionTexture
             //VERTEX
 
-            shaders.vertexShader = shader.vertexShader.replace('#include <common>', shaders.vertDefine)
+            shader.vertexShader = shader.vertexShader.replace('#include <common>', shaders.vertDefine)
             shader.vertexShader = shader.vertexShader.replace('#include <uv_vertex>', shaders.vertCalcNormal)
 
 
             if(!isDepthMaterial){
-                shaders.vertexShader = shader.vertexShader.replace('#include <uv_vertex>', shaders.vertCalcNormal)
-                shaders.vertexShader = shader.vertexShader.replace('#include <beginormal_vertex>', shaders.vertReplaceNormal)
+                shader.vertexShader = shader.vertexShader.replace('#include <uv_vertex>', shaders.vertCalcNormal)
+                shader.vertexShader = shader.vertexShader.replace('#include <beginormal_vertex>', shaders.vertReplaceNormal)
             }
-            shaders.vertexShader = shader.vertexShader.replace('#include <begin_vertex>', shaders.vertReplacePosition)
+            shader.vertexShader = shader.vertexShader.replace('#include <begin_vertex>', shaders.vertReplacePosition)
             //FRAGMENT
             if(!isDepthMaterial){
                 shader.fragmentShader = shader.fragmentShader.replace('#define STANDARD', shaders.fragDefine)

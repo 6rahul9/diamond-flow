@@ -13,7 +13,7 @@ export type Assets = {
         data? : THREE.Texture |  THREE.VideoTexture | GLTF
         path: string
         encoding? : boolean
-        flipy ? : boolean
+        flipy? : boolean
     }
 }
 
@@ -36,7 +36,7 @@ export abstract class TCanvasBase{
     constructor(parentNode: ParentNode, containerClassName = 'three-container'){
         let container: HTMLDivElement | null
         try{
-            container = parentNode .querySelector<HTMLDivElement>(`${containerClassName}`)
+            container = parentNode .querySelector<HTMLDivElement>(`.${containerClassName}`)
             if(!container)throw new Error(`undefined container : (${containerClassName}`)
         }catch(e){
             console.error(e)
@@ -53,7 +53,7 @@ export abstract class TCanvasBase{
     private init = () => {
         const{ width, height, aspect } = this.size
         //renderer
-        this.renderer = THREE.WebGLRenderer({ antialias: true, alpha: true })
+        this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
         this.renderer.setPixelRatio(window.devicePixelRatio)
         this.renderer.setSize(width, height)
         this.renderer.shadowMap.enabled = true
@@ -86,13 +86,13 @@ export abstract class TCanvasBase{
     protected get size(){
         const { innerHeight : height, innerWidth : width  } = window 
         const aspect = width / height 
-        return(width, height, aspect)
+        return { width, height, aspect }
     }
 
     protected get effectComposer (){
         if(!this.composer){
             this.composer = new EffectComposer(this.renderer)
-            this.composer.addPass(new RenderPass(this.camera, this.scene))
+            this.composer.addPass(new RenderPass(this.scene, this.camera))
         }
         return this.composer
     }
@@ -107,7 +107,7 @@ export abstract class TCanvasBase{
                 this._orbitControls.enableDamping = false
                 this._orbitControls.dampingFactor = 0
             }
-            this._orbitControls.enableDamping = this._orbitControls.dampingFactor 
+            this.enableOrbitControlsDamping = this._orbitControls.enableDamping
         return this._orbitControls
     }
 
@@ -127,7 +127,7 @@ export abstract class TCanvasBase{
     }
 
     protected calcCoveredTextureScale = (texture: THREE.Texture, aspect: number, target ?:THREE.Vector2) => {
-        const result = target  ?? THREE.Vector2()
+        const result = target  ?? new THREE.Vector2()
         const imageAspect = texture.image.width / texture.image.width 
         if(aspect < imageAspect) result.set(aspect / imageAspect, 1)
             else result.set(1, imageAspect / aspect)
@@ -137,7 +137,7 @@ export abstract class TCanvasBase{
     protected coveredbackgroundtexture = (texture : THREE.Texture) => {
         texture.matrixAutoUpdate = false 
         const scale = this.calcCoveredTextureScale(texture, this.size.aspect)
-        texture.matix.setUvTransform(0, 0, scale.x, scale.y, 0, 0.5, 0.5)
+        texture.matrix.setUvTransform(0, 0, scale.x, scale.y, 0, 0.5, 0.5)
         return texture
     }
 
@@ -157,6 +157,7 @@ export abstract class TCanvasBase{
 
                 if(['jpg', 'png', 'webp'].includes(extension)){
                     const texture = await textureLoader.loadAsync(v.path)
+                    texture.userData.aspect = texture.image.width / texture.image.height
                     v.encoding && (texture.encoding = THREE.sRGBEncoding)
                     v.flipY !== undefined && (texture.flipY = v.flipY)
                     v.data = texture
@@ -201,7 +202,7 @@ export abstract class TCanvasBase{
         }
     }
 
-    protected visibleStats = (mode: 'visible' | 'hiddn') => {
+    protected visibleStats = (mode: 'visible' | 'hidden') => {
         if(this.stats){
             this.stats.dom.style.visibility = mode 
         }
@@ -210,25 +211,46 @@ export abstract class TCanvasBase{
     // ------------------------------------------------------
 	// event
 
+    // private addEvents = () => {
+    //     window.addEventListener('resize', this.handleResize)
+    // }
+
+    // private handleResize = () => {
+    //     const { width, height, aspect } = this.size
+    //     this.resizeCallback && this.resizeCallback()
+    //     if(this.camera instanceof THREE.PerspectiveCamera){
+    //         this.camera.aspect = aspect 
+    //         this,camera.updateProjectionMatrix()
+    //     }else if(this.camera instanceof THREE.ExOrthographicCamera){
+    //         this.camera.update(aspect)
+    //     }
+
+    //     this.renderer.setSize(width, height)
+    //     this.composer?.setSize(width, height)
+    //     this.render()
+    // }
+
     private addEvents = () => {
-        window.addEventListener('resize', this.handleResize)
-    }
+		window.addEventListener('resize', this.handleResize)
+	}
 
-    private handleResize = () => {
-        const { width, height, aspect } = this.size
-        this.resizeCallback && this.resizeCallback()
-        if(this.camera instanceof THREE.PerspectiveCamera){
-            this.camera.aspect = aspect 
-            this,camera.updateProjectionMatrix()
-        }else if(this.camera instanceof THREE.ExOrthographicCamera){
-            this.camera.update(aspect)
-        }
+	private handleResize = () => {
+		const { width, height, aspect } = this.size
 
-        this.renderer.setSize(width, height)
-        this.composer?.setSize(width, height)
-        this.render()
-    }
+		this.resizeCallback && this.resizeCallback()
 
+		if (this.camera instanceof THREE.PerspectiveCamera) {
+			this.camera.aspect = aspect
+			this.camera.updateProjectionMatrix()
+		} else if (this.camera instanceof ExOrthographicCamera) {
+			this.camera.update(aspect)
+		}
+
+		this.renderer.setSize(width, height)
+		this.composer?.setSize(width, height)
+
+		this.render()
+	}
     // ------------------------------------------------------
 	// lifecycle
     protected animate =(callback?: () => void) => {
@@ -244,7 +266,7 @@ export abstract class TCanvasBase{
         if(!this.composer){
             this.renderer.render(this.scene, this.camera)
         }else{
-            this.composer.render
+            this.composer.render()
         }
     }
 
@@ -260,7 +282,7 @@ export abstract class TCanvasBase{
 
 export class ExOrthographicCamera extends THREE.OrthographicCamera{
     constructor(private halfHeight: number, near : number, far: number, aspect: number){
-    const halfWidth = this.halfHeight * aspect 
+        const halfWidth = halfHeight * aspect
     super (-halfWidth, halfWidth, halfHeight, -halfHeight, near, far)
     }
 
