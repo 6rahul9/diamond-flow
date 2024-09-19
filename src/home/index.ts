@@ -1,4 +1,4 @@
-import { TCanvas } from './TCanvas.ts'
+import { TCanvas } from './TCanvas'
 
 class App {
     private canvas: TCanvas 
