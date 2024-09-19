@@ -3,9 +3,9 @@ import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass';
 import { GammaCorrectionShader } from 'three/examples/jsm/shaders/GammaCorrectionShader';
 import { Mouse3d } from '../scripts/Mouse3d';
 import { Assets, TCanvasBase } from '../scripts/TCanvasBase';
-import { publicPath } from '../scripts/utlis.ts';
+import { publicPath } from '../scripts/utlis';
 import { ColorMaskPass } from './ColorMaskPass';
-import { FxaaPass } from './FxaaPass.ts';
+import { FxaaPass } from './FxaaPass';
 import { shaders } from './shaderChunk';
 import { Simulator } from './Simulator';
 
